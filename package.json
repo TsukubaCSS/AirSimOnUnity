@@ -1,0 +1,8 @@
+{
+    "name": "jp.css.airsim_on_unity",
+    "author": "css",
+    "version": "0.8.0",
+    "displayName": "AirSimOnUnity",
+    "description": "Scripts for AirSim",
+    "unity": "2021.3"
+}
