@@ -528,7 +528,7 @@ Camera:
     serializedVersion: 2
     m_Bits: 4294965759
   m_RenderingPath: 1
-  m_TargetTexture: {fileID: 8400000, guid: 3e2f16f77d6e1f248a7373bf0b951154, type: 2}
+  m_TargetTexture: {fileID: 8400000, guid: 380f0611fadc41044817db3a2fc63bba, type: 2}
   m_TargetDisplay: 0
   m_TargetEye: 3
   m_HDR: 0
@@ -960,7 +960,7 @@ Camera:
     serializedVersion: 2
     m_Bits: 4294965759
   m_RenderingPath: 1
-  m_TargetTexture: {fileID: 8400000, guid: b1339334589473548b8a4359d6e72454, type: 2}
+  m_TargetTexture: {fileID: 8400000, guid: 7925711b91a8a154395794669000941f, type: 2}
   m_TargetDisplay: 0
   m_TargetEye: 3
   m_HDR: 0
@@ -1660,7 +1660,7 @@ Camera:
     serializedVersion: 2
     m_Bits: 4294965759
   m_RenderingPath: -1
-  m_TargetTexture: {fileID: 8400000, guid: ca5a26a47741d2943bf1ca546bffb563, type: 2}
+  m_TargetTexture: {fileID: 8400000, guid: b3112268c9c397349bc55eb474829c40, type: 2}
   m_TargetDisplay: 0
   m_TargetEye: 3
   m_HDR: 0
