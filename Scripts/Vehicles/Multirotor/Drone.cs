@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using AirSimUnity.DroneStructs;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace AirSimUnity {
     /*
@@ -14,6 +15,8 @@ namespace AirSimUnity {
         public Transform[] rotors;
         private List<RotorInfo> rotorInfos = new List<RotorInfo>();
         private float rotationFactor = 0.1f;
+        [SerializeField]
+        private PlayerInput playerInput;
         
         private new void Start() {
             base.Start(); 
@@ -56,20 +59,23 @@ namespace AirSimUnity {
 
         private void UpdateRCData()
         {
-            rcData.is_valid = Input.GetJoystickNames()[0].Trim().Length > 0;
+            var joystickNames = Input.GetJoystickNames();
+            rcData.is_valid = (joystickNames.Length > 0) && (joystickNames[0].Trim().Length > 0);
             if (rcData.is_valid)
             {
                 //-1 to 1 --> 0 to 1
-                rcData.throttle = (Input.GetAxisRaw("Vertical") + 1) / 2;
+                var leftStick = playerInput.currentActionMap["Move"].ReadValue<Vector2>();
+                var rightStick = playerInput.currentActionMap["Look"].ReadValue<Vector2>();
+                rcData.throttle = (leftStick.y + 1) / 2;
 
                 //-1 to 1
-                rcData.yaw = Input.GetAxisRaw("Horizontal");
-                rcData.roll = Input.GetAxisRaw("Yaw");
-                rcData.pitch = Input.GetAxisRaw("Depth");
+                rcData.yaw = leftStick.x;
+                rcData.roll = rightStick.x;
+                rcData.pitch = rightStick.y;
 
                 //these will be available for devices like steering wheels
-                rcData.left_z = Input.GetButton("LeftZ") ? 1.0f : 0;
-                rcData.right_z = Input.GetButton("RightZ") ? 1.0f : 0;
+                //rcData.left_z = Input.GetButton("LeftZ") ? 1.0f : 0;
+                //rcData.right_z = Input.GetButton("RightZ") ? 1.0f : 0;
 
                 //rc_data_.switches = joystick_state_.buttons;
             }
@@ -87,7 +93,7 @@ namespace AirSimUnity {
             return airsimInterface.GetKinematicState();
         }
 
-        #region IVehicleInterface implementation
+#region IVehicleInterface implementation
 
         // Sets the animation for rotors on the drone. This is being done by AirLib through Pinvoke calls
         public override bool SetRotorSpeed(int rotorIndex, RotorInfo rotorInfo) {
@@ -104,6 +110,6 @@ namespace AirSimUnity {
             return data;
         }
 
-        #endregion IVehicleInterface implementation
+#endregion IVehicleInterface implementation
     }
 }
