@@ -302,7 +302,7 @@ namespace AirSimUnity {
                     Debug.LogError(message + " " + messageParams + " Vehicle=" + vehicleName);
                     break;
                 default:
-                    Debug.Log(message + " " + messageParams + " Vehicle=" + vehicleName);
+                    //Debug.Log(message + " " + messageParams + " Vehicle=" + vehicleName);
                     break;
             }
             return true;
