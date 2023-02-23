@@ -17,9 +17,63 @@ namespace AirSimUnity {
         private float rotationFactor = 0.1f;
         [SerializeField]
         private PlayerInput playerInput;
-        
+        private Vector3 _previousPosition;
+
+        [SerializeField]
+        private float _throttleUpVelocity;
+        [SerializeField]
+        private float _throttleDownpVelocity;
+        [SerializeField]
+        private float _moveVelocity;
+
+        [SerializeField]
+        private Vector3 _throttlePID;
+        [SerializeField]
+        private Vector3 _movePID;
+
+
+        private class PIControl
+        {
+            private float _gainP;
+            private float _gainI;
+            private float _gainD;
+            private float _iTotal;
+            private float _previousDiff;
+
+            public float Calculate(float target, float current)
+            {
+                var diff = target - current;
+                _iTotal += diff;
+                var value = (_gainP * diff) + (_gainI * _iTotal) + (_gainD * (diff - _previousDiff));
+                _previousDiff = diff;
+                return value;
+            }
+
+            public PIControl(float gainP, float gainI, float gainD)
+            {
+                _gainP = gainP;
+                _gainI = gainI;
+                _gainD = gainD;
+            }
+
+            public PIControl(Vector3 gains)
+            {
+                _gainP = gains.x;
+                _gainI = gains.y;
+                _gainD = gains.z;
+            }
+        }
+
+        private PIControl _throttleControl;
+        private PIControl _rollControl;
+        private PIControl _pitchControl;
+
         private new void Start() {
-            base.Start(); 
+            base.Start();
+
+            _throttleControl = new(_throttlePID);
+            _rollControl = new(_movePID);
+            _pitchControl = new(_movePID);
 
             for (int i = 0; i < rotors.Length; i++) {
                 rotorInfos.Add(new RotorInfo());
@@ -41,8 +95,7 @@ namespace AirSimUnity {
                 DataManager.SetToUnity(poseFromAirLib.position, ref position);
                 DataManager.SetToUnity(poseFromAirLib.orientation, ref rotation);
 
-                transform.position = position;
-                transform.rotation = rotation;
+                transform.SetPositionAndRotation(position, rotation);
 
                 currentPose = poseFromAirLib;
 
@@ -61,8 +114,29 @@ namespace AirSimUnity {
         {
             var joystickNames = Input.GetJoystickNames();
             rcData.is_valid = (joystickNames.Length > 0) && (joystickNames[0].Trim().Length > 0);
+
+
             if (rcData.is_valid)
             {
+                var leftStick = IgnoreTinyValue(playerInput.currentActionMap["Move"].ReadValue<Vector2>());
+                var rightStick = IgnoreTinyValue(playerInput.currentActionMap["Look"].ReadValue<Vector2>().normalized);
+
+                var position = transform.position;
+                var velocity = (position - _previousPosition) / Time.deltaTime;
+                _previousPosition = position;
+
+                var targetThrottleVelocity = ((leftStick.y > 0) ? _throttleUpVelocity : _throttleDownpVelocity) * leftStick.y;
+                // !!! 15.0f
+
+                rcData.throttle = _throttleControl.Calculate(targetThrottleVelocity, velocity.y);
+                rcData.yaw = leftStick.x;
+
+                var targetRollVelocity = _moveVelocity * rightStick.x;
+                var targetPitchVelocity = _moveVelocity * rightStick.y;
+                rcData.roll = _rollControl.Calculate(targetRollVelocity, velocity.x);
+                rcData.pitch = _pitchControl.Calculate(targetPitchVelocity, velocity.z);
+
+#if false
                 //-1 to 1 --> 0 to 1
                 var leftStick = playerInput.currentActionMap["Move"].ReadValue<Vector2>();
                 var rightStick = playerInput.currentActionMap["Look"].ReadValue<Vector2>();
@@ -78,7 +152,15 @@ namespace AirSimUnity {
                 //rcData.right_z = Input.GetButton("RightZ") ? 1.0f : 0;
 
                 //rc_data_.switches = joystick_state_.buttons;
+#endif
             }
+        }
+
+        private Vector2 IgnoreTinyValue(Vector2 value)
+        {
+            var x = Mathf.Abs(value.x) < 0.1f ? 0 : value.x;
+            var y = Mathf.Abs(value.y) < 0.1f ? 0 : value.y;
+            return new Vector2(x, y);
         }
 
         private new void LateUpdate() {

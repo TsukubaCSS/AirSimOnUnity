@@ -1303,9 +1303,9 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1875394544442156}
-  m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 3, y: 1.5, z: 3}
+  m_LocalScale: {x: 3, y: 3, z: 3}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4101229880971656}
@@ -1354,6 +1354,11 @@ MonoBehaviour:
   - {fileID: 4020484427975156}
   - {fileID: 4440307377686916}
   playerInput: {fileID: -215057497678883083}
+  _throttleUpVelocity: 3
+  _throttleDownpVelocity: 2
+  _moveVelocity: 15
+  _throttlePID: {x: 1.25, y: 0.02, z: 0.4}
+  _movePID: {x: 0.08, y: 0, z: 1}
 --- !u!114 &-215057497678883083
 MonoBehaviour:
   m_ObjectHideFlags: 0
