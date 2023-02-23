@@ -1356,9 +1356,9 @@ MonoBehaviour:
   playerInput: {fileID: -215057497678883083}
   _throttleUpVelocity: 3
   _throttleDownpVelocity: 2
-  _moveVelocity: 15
+  _moveVelocity: 5
   _throttlePID: {x: 1.25, y: 0.02, z: 0.4}
-  _movePID: {x: 0.08, y: 0, z: 1}
+  _movePID: {x: 0.16, y: 0, z: 0.1}
 --- !u!114 &-215057497678883083
 MonoBehaviour:
   m_ObjectHideFlags: 0

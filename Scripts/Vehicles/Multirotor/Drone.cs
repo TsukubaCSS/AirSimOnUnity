@@ -123,6 +123,7 @@ namespace AirSimUnity {
 
                 var position = transform.position;
                 var velocity = (position - _previousPosition) / Time.deltaTime;
+                var localVelocity = Quaternion.Euler(0, -transform.rotation.eulerAngles.y, 0) * velocity;
                 _previousPosition = position;
 
                 var targetThrottleVelocity = ((leftStick.y > 0) ? _throttleUpVelocity : _throttleDownpVelocity) * leftStick.y;
@@ -133,8 +134,8 @@ namespace AirSimUnity {
 
                 var targetRollVelocity = _moveVelocity * rightStick.x;
                 var targetPitchVelocity = _moveVelocity * rightStick.y;
-                rcData.roll = _rollControl.Calculate(targetRollVelocity, velocity.x);
-                rcData.pitch = _pitchControl.Calculate(targetPitchVelocity, velocity.z);
+                rcData.roll = _rollControl.Calculate(targetRollVelocity, localVelocity.x);
+                rcData.pitch = _pitchControl.Calculate(targetPitchVelocity, localVelocity.z);
 
 #if false
                 //-1 to 1 --> 0 to 1
@@ -158,8 +159,8 @@ namespace AirSimUnity {
 
         private Vector2 IgnoreTinyValue(Vector2 value)
         {
-            var x = Mathf.Abs(value.x) < 0.1f ? 0 : value.x;
-            var y = Mathf.Abs(value.y) < 0.1f ? 0 : value.y;
+            var x = Mathf.Abs(value.x) < 0.2f ? 0 : value.x;
+            var y = Mathf.Abs(value.y) < 0.2f ? 0 : value.y;
             return new Vector2(x, y);
         }
 
