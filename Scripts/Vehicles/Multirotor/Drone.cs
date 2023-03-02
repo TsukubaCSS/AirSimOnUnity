@@ -25,6 +25,8 @@ namespace AirSimUnity {
         private float _throttleDownpVelocity;
         [SerializeField]
         private float _moveVelocity;
+        [SerializeField]
+        private float _rotateSpeedRatio;
 
         [SerializeField]
         private Vector3 _throttlePID;
@@ -127,10 +129,9 @@ namespace AirSimUnity {
                 _previousPosition = position;
 
                 var targetThrottleVelocity = ((leftStick.y > 0) ? _throttleUpVelocity : _throttleDownpVelocity) * leftStick.y;
-                // !!! 15.0f
 
                 rcData.throttle = _throttleControl.Calculate(targetThrottleVelocity, velocity.y);
-                rcData.yaw = leftStick.x;
+                rcData.yaw = _rotateSpeedRatio * leftStick.x;
 
                 var targetRollVelocity = _moveVelocity * rightStick.x;
                 var targetPitchVelocity = _moveVelocity * rightStick.y;

@@ -299,7 +299,7 @@ namespace AirSimUnity {
                     Debug.LogWarning(message + " " + messageParams + " Vehicle=" + vehicleName);
                     break;
                 case 2:
-                    Debug.LogError(message + " " + messageParams + " Vehicle=" + vehicleName);
+                    //Debug.LogError(message + " " + messageParams + " Vehicle=" + vehicleName);
                     break;
                 default:
                     //Debug.Log(message + " " + messageParams + " Vehicle=" + vehicleName);
