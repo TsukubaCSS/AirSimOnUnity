@@ -23,8 +23,8 @@ public class SaveRenderTexture : MonoBehaviour
 
         Save();
     }
-        
-    public void Save()
+
+    public void SaveAs(string path)
     {
         var texture = new Texture2D(_target.width, _target.height, TextureFormat.RGB24, false);
         RenderTexture.active = _target;
@@ -34,7 +34,13 @@ public class SaveRenderTexture : MonoBehaviour
         var bytes = texture.EncodeToPNG();
         Destroy(texture);
 
-        File.WriteAllBytes(Path.Combine(_saveDirectory, $"capture_{_captureIndex:000}.png"), bytes);
+        File.WriteAllBytes(path, bytes);
+    }
+        
+    public void Save()
+    {
+        var path = Path.Combine(_saveDirectory, $"capture_{_captureIndex:000}.png");
         ++_captureIndex;
+        SaveAs(path);
     }
 }
