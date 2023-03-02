@@ -84,6 +84,7 @@ GameObject:
   - component: {fileID: 5936793543990333018}
   - component: {fileID: 5936793543990333020}
   - component: {fileID: 5936793543990333021}
+  - component: {fileID: 4614030288723851287}
   m_Layer: 5
   m_Name: LiveViewCameraFrame
   m_TagString: Untagged
@@ -107,11 +108,11 @@ RectTransform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0}
-  m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: 0, y: 4}
+  m_AnchorMin: {x: 1, y: 0}
+  m_AnchorMax: {x: 1, y: 0}
+  m_AnchoredPosition: {x: -4, y: 4}
   m_SizeDelta: {x: 408, y: 308}
-  m_Pivot: {x: 0.5, y: 0}
+  m_Pivot: {x: 1, y: 0}
 --- !u!222 &5936793543990333020
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -150,3 +151,17 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &4614030288723851287
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5936793543990333019}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a12ec4f30eac08a4ea1f82e5fa2fd439, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _maximizeScaleValue: 3.48
+  _maximizePositionOffset: {x: -245, y: 0}

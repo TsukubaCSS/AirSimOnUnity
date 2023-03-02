@@ -33,6 +33,15 @@ namespace AirSimUnity {
         [SerializeField]
         private Vector3 _movePID;
 
+        [SerializeField]
+        private Camera _liveViewCamera;
+        [SerializeField]
+        private float _minFoV;
+        [SerializeField]
+        private float _maxFoV;
+        [SerializeField]
+        private float _zoomSpeed;
+
 
         private class PIControl
         {
@@ -127,6 +136,9 @@ namespace AirSimUnity {
                 var velocity = (position - _previousPosition) / Time.deltaTime;
                 var localVelocity = Quaternion.Euler(0, -transform.rotation.eulerAngles.y, 0) * velocity;
                 _previousPosition = position;
+
+                var zoomValue = playerInput.currentActionMap["Zoom"].ReadValue<float>();
+                _liveViewCamera.fieldOfView = Mathf.Max(_minFoV, Mathf.Min(_maxFoV, _liveViewCamera.fieldOfView + (-zoomValue * _zoomSpeed)));
 
                 var targetThrottleVelocity = ((leftStick.y > 0) ? _throttleUpVelocity : _throttleDownpVelocity) * leftStick.y;
 
