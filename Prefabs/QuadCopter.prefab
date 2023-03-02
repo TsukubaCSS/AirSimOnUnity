@@ -1289,6 +1289,7 @@ GameObject:
   - component: {fileID: 54157386125878504}
   - component: {fileID: 114101639218931136}
   - component: {fileID: -215057497678883083}
+  - component: {fileID: 330929023895112234}
   m_Layer: 0
   m_Name: QuadCopter
   m_TagString: Untagged
@@ -1422,7 +1423,19 @@ MonoBehaviour:
     m_ActionId: 3f6570d2-de1e-43f8-b7d2-a14a47d1fd21
     m_ActionName: Player/System[/XInputControllerWindows/start]
   - m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 330929023895112234}
+        m_TargetAssemblyTypeName: SaveRenderTexture, AirSimOnUnity
+        m_MethodName: Save
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_ActionId: 8deca325-5948-4900-9897-638abbf28bab
     m_ActionName: Player/Capture[/XInputControllerWindows/rightShoulder]
   - m_PersistentCalls:
@@ -1470,6 +1483,20 @@ MonoBehaviour:
   m_DefaultActionMap: Player
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
+--- !u!114 &330929023895112234
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1875394544442156}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8484e8e894780734796b7d7b5de0e193, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _saveDirectory: ../
+  _target: {fileID: 8400000, guid: b3112268c9c397349bc55eb474829c40, type: 2}
 --- !u!1 &1878785252202278
 GameObject:
   m_ObjectHideFlags: 0
