@@ -43,14 +43,4 @@ public class LiveViewCameraFrame : MonoBehaviour
     {
         Maximize = !Maximize;
     }
-
-    public void OnPress(InputAction.CallbackContext content)
-    {
-        if (!content.performed)
-        {
-            return;
-        }
-
-        ToggleMaximize();
-    }
 }

@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class SaveRenderTexture : MonoBehaviour
 {
@@ -13,6 +14,16 @@ public class SaveRenderTexture : MonoBehaviour
     private int _captureIndex;
 
 
+    public void OnPress(InputAction.CallbackContext content)
+    {
+        if (!content.performed)
+        {
+            return;
+        }
+
+        Save();
+    }
+        
     public void Save()
     {
         var texture = new Texture2D(_target.width, _target.height, TextureFormat.RGB24, false);
