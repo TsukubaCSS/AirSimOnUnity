@@ -1359,7 +1359,7 @@ MonoBehaviour:
   _moveVelocity: 1.25
   _rotateSpeedRatio: 0.75
   _throttlePID: {x: 1.25, y: 0.02, z: 0.4}
-  _movePID: {x: 0.4, y: 0, z: 0.2}
+  _movePID: {x: 0.4, y: 0, z: 0}
   _liveViewCamera: {fileID: 20953887651195578}
   _minFoV: 1
   _maxFoV: 90
@@ -1598,7 +1598,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1880359752599032}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0.02, z: 0.03}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
