@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using AirSimUnity.DroneStructs;
+using Codice.Client.BaseCommands.Update.Fast.Transformers;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UIElements;
 
 namespace AirSimUnity {
     /*
@@ -18,6 +20,7 @@ namespace AirSimUnity {
         [SerializeField]
         private PlayerInput playerInput;
         private Vector3 _previousPosition;
+        private Quaternion _previousRotation;
 
         [SerializeField]
         private float _throttleUpVelocity;
@@ -30,6 +33,8 @@ namespace AirSimUnity {
 
         [SerializeField]
         private Vector3 _throttlePID;
+        [SerializeField]
+        private Vector3 _rotatePID;
         [SerializeField]
         private Vector3 _movePID;
 
@@ -76,6 +81,7 @@ namespace AirSimUnity {
         }
 
         private PIControl _throttleControl;
+        private PIControl _yawControl;
         private PIControl _rollControl;
         private PIControl _pitchControl;
 
@@ -83,6 +89,7 @@ namespace AirSimUnity {
             base.Start();
 
             _throttleControl = new(_throttlePID);
+            _yawControl = new(_rotatePID);
             _rollControl = new(_movePID);
             _pitchControl = new(_movePID);
 
@@ -137,13 +144,20 @@ namespace AirSimUnity {
                 var localVelocity = Quaternion.Euler(0, -transform.rotation.eulerAngles.y, 0) * velocity;
                 _previousPosition = position;
 
+                var rotation = transform.rotation;
+                var deltaRotation = Quaternion.Inverse(_previousRotation) * rotation;
+                deltaRotation.ToAngleAxis(out var angle, out var axis);
+                var rotateVelocity = angle / Time.deltaTime;
+                var rotateDegree = rotation * axis;
+                _previousRotation = rotation;
+
                 var zoomValue = playerInput.currentActionMap["Zoom"].ReadValue<float>();
                 _liveViewCamera.fieldOfView = Mathf.Max(_minFoV, Mathf.Min(_maxFoV, _liveViewCamera.fieldOfView + (-zoomValue * _zoomSpeed)));
 
                 var targetThrottleVelocity = ((leftStick.y > 0) ? _throttleUpVelocity : _throttleDownpVelocity) * leftStick.y;
 
                 rcData.throttle = _throttleControl.Calculate(targetThrottleVelocity, velocity.y);
-                rcData.yaw = _rotateSpeedRatio * leftStick.x;
+                rcData.yaw = _yawControl.Calculate(_rotateSpeedRatio * leftStick.x, rotateDegree.y);
 
                 var targetRollVelocity = _moveVelocity * rightStick.x;
                 var targetPitchVelocity = _moveVelocity * rightStick.y;
