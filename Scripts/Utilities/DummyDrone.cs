@@ -8,10 +8,6 @@ public class DummyDrone : MonoBehaviour
     private List<GameObject> _rotors;
 
 
-    private void Start()
-    {
-    }
-
     private void Update()
     {
         foreach (var rotor in _rotors)
