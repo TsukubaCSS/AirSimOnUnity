@@ -1,5 +1,3 @@
-using Codice.Client.Common;
-using Sirenix.Serialization;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -52,7 +50,7 @@ public class DroneDataRecorder : MonoBehaviour
 
     private void FixedUpdate()
     {
-        var deltaTime = UnityEngine.Time.deltaTime;
+        var deltaTime = Time.deltaTime;
         _totalElapsed += deltaTime;
 
         if (_recording)
