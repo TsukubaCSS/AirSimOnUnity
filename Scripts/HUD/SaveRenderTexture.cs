@@ -43,4 +43,6 @@ public class SaveRenderTexture : MonoBehaviour
         ++_captureIndex;
         SaveAs(path);
     }
+
+    public int CaptureCount => _captureIndex;
 }

@@ -18,7 +18,7 @@ namespace AirSimUnity {
         private List<RotorInfo> rotorInfos = new List<RotorInfo>();
         private float rotationFactor = 0.1f;
         [SerializeField]
-        private PlayerInput playerInput;
+        private PlayerInput _playerInput;
         private Vector3 _previousPosition;
         private Quaternion _previousRotation;
 
@@ -47,6 +47,14 @@ namespace AirSimUnity {
         [SerializeField]
         private float _zoomSpeed;
 
+
+        public enum PowerStates
+        {
+            Off,
+            On,
+            Landing,
+        }
+        public PowerStates PowerState { get; private set; } = PowerStates.Off;
 
         private class PIControl
         {
@@ -133,55 +141,58 @@ namespace AirSimUnity {
             var joystickNames = Input.GetJoystickNames();
             rcData.is_valid = (joystickNames.Length > 0) && (joystickNames[0].Trim().Length > 0);
 
+            var position = transform.position;
+            var velocity = (position - _previousPosition) / Time.deltaTime;
+            var localVelocity = Quaternion.Euler(0, -transform.rotation.eulerAngles.y, 0) * velocity;
+            _previousPosition = position;
+
+            var rotation = transform.rotation;
+            var deltaRotation = Quaternion.Inverse(_previousRotation) * rotation;
+            deltaRotation.ToAngleAxis(out var angle, out var axis);
+            //var rotateVelocity = angle / Time.deltaTime;
+            var rotateDegrees = rotation * axis;
+            _previousRotation = rotation;
 
             if (rcData.is_valid)
             {
-                var leftStick = IgnoreTinyValue(playerInput.currentActionMap["Move"].ReadValue<Vector2>());
-                var rightStick = IgnoreTinyValue(playerInput.currentActionMap["Look"].ReadValue<Vector2>().normalized);
+                switch (PowerState)
+                {
+                    case PowerStates.On:
+                        ControlByJoystick(velocity, localVelocity, rotateDegrees);
+                        break;
 
-                var position = transform.position;
-                var velocity = (position - _previousPosition) / Time.deltaTime;
-                var localVelocity = Quaternion.Euler(0, -transform.rotation.eulerAngles.y, 0) * velocity;
-                _previousPosition = position;
+                    case PowerStates.Off:
+                        // do nothing
+                        break;
 
-                var rotation = transform.rotation;
-                var deltaRotation = Quaternion.Inverse(_previousRotation) * rotation;
-                deltaRotation.ToAngleAxis(out var angle, out var axis);
-                var rotateVelocity = angle / Time.deltaTime;
-                var rotateDegree = rotation * axis;
-                _previousRotation = rotation;
-
-                var zoomValue = playerInput.currentActionMap["Zoom"].ReadValue<float>();
-                _liveViewCamera.fieldOfView = Mathf.Max(_minFoV, Mathf.Min(_maxFoV, _liveViewCamera.fieldOfView + (-zoomValue * _zoomSpeed)));
-
-                var targetThrottleVelocity = ((leftStick.y > 0) ? _throttleUpVelocity : _throttleDownpVelocity) * leftStick.y;
-
-                rcData.throttle = _throttleControl.Calculate(targetThrottleVelocity, velocity.y);
-                rcData.yaw = _yawControl.Calculate(_rotateSpeedRatio * leftStick.x, rotateDegree.y);
-
-                var targetRollVelocity = _moveVelocity * rightStick.x;
-                var targetPitchVelocity = _moveVelocity * rightStick.y;
-                rcData.roll = _rollControl.Calculate(targetRollVelocity, localVelocity.x);
-                rcData.pitch = _pitchControl.Calculate(targetPitchVelocity, localVelocity.z);
-
-#if false
-                //-1 to 1 --> 0 to 1
-                var leftStick = playerInput.currentActionMap["Move"].ReadValue<Vector2>();
-                var rightStick = playerInput.currentActionMap["Look"].ReadValue<Vector2>();
-                rcData.throttle = (leftStick.y + 1) / 2;
-
-                //-1 to 1
-                rcData.yaw = leftStick.x;
-                rcData.roll = rightStick.x;
-                rcData.pitch = rightStick.y;
-
-                //these will be available for devices like steering wheels
-                //rcData.left_z = Input.GetButton("LeftZ") ? 1.0f : 0;
-                //rcData.right_z = Input.GetButton("RightZ") ? 1.0f : 0;
-
-                //rc_data_.switches = joystick_state_.buttons;
-#endif
+                    case PowerStates.Landing:
+                        Landing();
+                        break;
+                }
             }
+        }
+
+        private void ControlByJoystick(Vector3 velocity, Vector3 localVelocity, Vector3 rotateDegrees)
+        {
+            var leftStick = IgnoreTinyValue(_playerInput.currentActionMap["Move"].ReadValue<Vector2>());
+            var rightStick = IgnoreTinyValue(_playerInput.currentActionMap["Look"].ReadValue<Vector2>().normalized);
+
+            var zoomValue = _playerInput.currentActionMap["Zoom"].ReadValue<float>();
+            _liveViewCamera.fieldOfView = Mathf.Max(_minFoV, Mathf.Min(_maxFoV, _liveViewCamera.fieldOfView + (-zoomValue * _zoomSpeed)));
+
+            var targetThrottleVelocity = ((leftStick.y > 0) ? _throttleUpVelocity : _throttleDownpVelocity) * leftStick.y;
+
+            rcData.throttle = _throttleControl.Calculate(targetThrottleVelocity, velocity.y);
+            rcData.yaw = _yawControl.Calculate(_rotateSpeedRatio * leftStick.x, rotateDegrees.y);
+
+            var targetRollVelocity = _moveVelocity * rightStick.x;
+            var targetPitchVelocity = _moveVelocity * rightStick.y;
+            rcData.roll = _rollControl.Calculate(targetRollVelocity, localVelocity.x);
+            rcData.pitch = _pitchControl.Calculate(targetPitchVelocity, localVelocity.z);
+        }
+        private void Landing()
+        {
+            // !!!
         }
 
         private Vector2 IgnoreTinyValue(Vector2 value)
@@ -221,5 +232,14 @@ namespace AirSimUnity {
         }
 
 #endregion IVehicleInterface implementation
+
+        public void OnButtonPressed()
+        {
+            PowerState = PowerStates.On;
+        }
+        public void OffButtonPressed()
+        {
+            PowerState = PowerStates.Off;
+        }
     }
 }

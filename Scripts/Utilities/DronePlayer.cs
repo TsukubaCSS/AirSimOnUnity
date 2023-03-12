@@ -25,6 +25,8 @@ public class DronePlayer : MonoBehaviour
     private void Start()
     {
         _reader = new StreamReader(_filePath);
+        // skip first line
+        _reader.ReadLine();
         (_nextTime, _nextPosition, _nextAngles) = ParseLine(_reader.ReadLine());
         _totalElapsed = _playOffset;
     }
@@ -36,7 +38,7 @@ public class DronePlayer : MonoBehaviour
         if (_nextTime < _totalElapsed)
         {
             var line = _reader.ReadLine();
-            if (line == null)
+            if (string.IsNullOrWhiteSpace(line) || (line[0] == '#'))
             {
                 _nextTime = float.MaxValue;
                 return;

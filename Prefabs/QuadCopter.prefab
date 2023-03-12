@@ -1289,8 +1289,8 @@ GameObject:
   - component: {fileID: 54157386125878504}
   - component: {fileID: 114101639218931136}
   - component: {fileID: -215057497678883083}
-  - component: {fileID: 6251172111311000453}
   - component: {fileID: 330929023895112234}
+  - component: {fileID: 6251172111311000453}
   m_Layer: 0
   m_Name: QuadCopter
   m_TagString: Untagged
@@ -1355,7 +1355,7 @@ MonoBehaviour:
   - {fileID: 4253307352233798}
   - {fileID: 4020484427975156}
   - {fileID: 4440307377686916}
-  playerInput: {fileID: -215057497678883083}
+  _playerInput: {fileID: -215057497678883083}
   _throttleUpVelocity: 1.5
   _throttleDownpVelocity: 1
   _moveVelocity: 1.25
@@ -1441,64 +1441,42 @@ MonoBehaviour:
     m_ActionId: 8deca325-5948-4900-9897-638abbf28bab
     m_ActionName: Player/Capture[/XInputControllerWindows/rightShoulder]
   - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: 00f2fdc4-83fa-4f1c-8d26-782ee9cfc0df
-    m_ActionName: UI/Navigate[/XInputControllerWindows/leftStick/up,/XInputControllerWindows/rightStick/up,/XInputControllerWindows/leftStick/down,/XInputControllerWindows/rightStick/down,/XInputControllerWindows/leftStick/left,/XInputControllerWindows/rightStick/left,/XInputControllerWindows/leftStick/right,/XInputControllerWindows/rightStick/right,/XInputControllerWindows/dpad,/Keyboard/w,/Keyboard/upArrow,/Keyboard/s,/Keyboard/downArrow,/Keyboard/a,/Keyboard/leftArrow,/Keyboard/d,/Keyboard/rightArrow]
+      m_Calls:
+      - m_Target: {fileID: 114101639218931136}
+        m_TargetAssemblyTypeName: AirSimUnity.Drone, AirSimOnUnity
+        m_MethodName: OnButtonPressed
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 8c3230e4-e201-4da7-9704-44df2bf5f5d3
+    m_ActionName: Player/New action
   - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: 24349943-33a6-4b1d-8b2f-4fa77ed6801d
-    m_ActionName: UI/Submit[/Keyboard/enter,/XInputControllerWindows/buttonSouth]
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: 8f78e40c-eb33-4e8b-ab57-10da875ff31c
-    m_ActionName: UI/Cancel[/Keyboard/escape,/XInputControllerWindows/buttonEast]
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: 41d86434-ccef-44db-b30d-d493102fe6a8
-    m_ActionName: UI/Point[/Mouse/position]
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: a8bbbf24-bc39-43b2-ad4d-a1bf9f4b6395
-    m_ActionName: UI/Click[/Mouse/leftButton]
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: 38ec5a00-d563-4296-9548-b322eccc84f3
-    m_ActionName: UI/ScrollWheel[/Mouse/scroll]
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: cb25b36f-dea4-457a-a010-e64e81f49929
-    m_ActionName: UI/MiddleClick[/Mouse/middleButton]
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: ae85a58b-4bdb-423c-ad46-be288ba70925
-    m_ActionName: UI/RightClick[/Mouse/rightButton]
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: e598ee76-a0b9-4cd3-83c6-4931f0962157
-    m_ActionName: UI/TrackedDevicePosition
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: 009813d5-fb80-47c1-bfee-07e4bb17c0a2
-    m_ActionName: UI/TrackedDeviceOrientation
+      m_Calls:
+      - m_Target: {fileID: 114101639218931136}
+        m_TargetAssemblyTypeName: AirSimUnity.Drone, AirSimOnUnity
+        m_MethodName: OffButtonPressed
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: d321a16d-e9f3-4fd5-9238-b0edf420f778
+    m_ActionName: Player/OnOff1
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Player
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
---- !u!114 &6251172111311000453
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1875394544442156}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 045c0d100346f4046932eebb41cd6439, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _filePath: ../record_data.csv
-  _recordInterval: 0.1
 --- !u!114 &330929023895112234
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1513,6 +1491,26 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _saveDirectory: ../
   _target: {fileID: 8400000, guid: b3112268c9c397349bc55eb474829c40, type: 2}
+--- !u!114 &6251172111311000453
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1875394544442156}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 045c0d100346f4046932eebb41cd6439, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _recording: 0
+  _filePath: ../record_data.csv
+  _recordInterval: 0.1
+  _drone: {fileID: 114101639218931136}
+  _playerInput: {fileID: -215057497678883083}
+  _saveRenderTexture: {fileID: 330929023895112234}
+  _liveViewCameraFrame: {fileID: 0}
+  _liveViewCamera: {fileID: 20953887651195578}
 --- !u!1 &1878785252202278
 GameObject:
   m_ObjectHideFlags: 0
