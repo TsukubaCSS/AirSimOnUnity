@@ -1361,6 +1361,7 @@ MonoBehaviour:
   _moveVelocity: 1.25
   _rotateSpeedRatio: 10
   _throttlePID: {x: 1.25, y: 0.02, z: 0.4}
+  _throttleFirstITotal: 30
   _rotatePID: {x: 0.1, y: 0, z: 0}
   _movePID: {x: 0.4, y: 0, z: 0}
   _liveViewCamera: {fileID: 20953887651195578}

@@ -34,6 +34,8 @@ namespace AirSimUnity {
         [SerializeField]
         private Vector3 _throttlePID;
         [SerializeField]
+        private float _throttleFirstITotal;
+        [SerializeField]
         private Vector3 _rotatePID;
         [SerializeField]
         private Vector3 _movePID;
@@ -73,6 +75,14 @@ namespace AirSimUnity {
                 return value;
             }
 
+            public float ITotal
+            {
+                set 
+                {
+                    _iTotal = value;
+                } 
+            }
+
             public PIControl(float gainP, float gainI, float gainD)
             {
                 _gainP = gainP;
@@ -97,6 +107,7 @@ namespace AirSimUnity {
             base.Start();
 
             _throttleControl = new(_throttlePID);
+            _throttleControl.ITotal = _throttleFirstITotal;
             _yawControl = new(_rotatePID);
             _rollControl = new(_movePID);
             _pitchControl = new(_movePID);
