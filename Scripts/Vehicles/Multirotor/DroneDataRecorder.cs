@@ -85,7 +85,7 @@ public class DroneDataRecorder : MonoBehaviour
                 float fov = _liveViewCamera.fieldOfView;
                 int captureCount = _saveRenderTexture.CaptureCount;
                 int power = (int)_drone.PowerState;
-                var controls = $"{leftStick.y}\t{leftStick.x}\t{rightStick.x}\t{rightStick.y}\t{view}\t{fov}\t{captureCount}\t{power}";
+                var controls = $"{leftStick.y.ToString(FLOAT_FORMAT)}\t{leftStick.x.ToString(FLOAT_FORMAT)}\t{rightStick.x.ToString(FLOAT_FORMAT)}\t{rightStick.y.ToString(FLOAT_FORMAT)}\t{view}\t{fov.ToString(FLOAT_FORMAT)}\t{captureCount}\t{power}";
                 _writer.WriteLine($"{positionAngles}\t{controls}");
             }
         }
