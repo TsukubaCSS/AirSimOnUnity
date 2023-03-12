@@ -25,6 +25,5 @@ public class CrossPad : MonoBehaviour
         _horizontalSlider.transform.localPosition = new Vector3(0, _length / 2 * position.y);
         _verticalSlider.transform.localPosition = new Vector3(_length / 2 * position.x, 0);
         _verticalSlider.value = (position.y + 1.0f) / 2.0f;
-        // !!!
     }
 }
