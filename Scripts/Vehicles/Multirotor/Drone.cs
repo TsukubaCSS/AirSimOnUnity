@@ -61,7 +61,7 @@ namespace AirSimUnity {
             On,
             Landing,
         }
-        public PowerStates PowerState { get; private set; } = PowerStates.Off;
+        public PowerStates PowerState { get; set; } = PowerStates.Off;
 
         private class PIControl
         {
