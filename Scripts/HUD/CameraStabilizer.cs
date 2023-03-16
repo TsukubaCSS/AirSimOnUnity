@@ -11,7 +11,7 @@ public class CameraStabilizer : MonoBehaviour
         var angles = transform.eulerAngles;
 
         _rollDegrees.Add((angles.z > 180.0f) ? angles.z - 360.0f : angles.z);
-        if (_rollDegrees.Count > 5)
+        if (_rollDegrees.Count > 7)
         {
             _rollDegrees.RemoveAt(0);
         }
