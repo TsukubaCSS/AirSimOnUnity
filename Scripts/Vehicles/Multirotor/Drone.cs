@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net.Sockets;
 using AirSimUnity.DroneStructs;
 using Codice.Client.BaseCommands.Update.Fast.Transformers;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 using UnityEngine.UIElements;
 
 namespace AirSimUnity {
@@ -48,6 +50,9 @@ namespace AirSimUnity {
         private float _maxFoV;
         [SerializeField]
         private float _zoomSpeed;
+
+        [SerializeField]
+        private GameObject _bottom;
 
 
         public enum PowerStates
@@ -102,6 +107,8 @@ namespace AirSimUnity {
         private PIControl _yawControl;
         private PIControl _rollControl;
         private PIControl _pitchControl;
+        private float _firstThrottleSeconds;
+
 
         private new void Start() {
             base.Start();
@@ -160,7 +167,6 @@ namespace AirSimUnity {
             var rotation = transform.rotation;
             var deltaRotation = Quaternion.Inverse(_previousRotation) * rotation;
             deltaRotation.ToAngleAxis(out var angle, out var axis);
-            //var rotateVelocity = angle / Time.deltaTime;
             var rotateDegrees = rotation * axis;
             _previousRotation = rotation;
 
@@ -172,12 +178,15 @@ namespace AirSimUnity {
                         ControlByJoystick(velocity, localVelocity, rotateDegrees);
                         break;
 
-                    case PowerStates.Off:
-                        // do nothing
+                    case PowerStates.Landing:
+                        ControlLanding(velocity);
                         break;
 
-                    case PowerStates.Landing:
-                        Landing();
+                    case PowerStates.Off:
+                        rcData.throttle = 0;
+                        rcData.yaw = 0;
+                        rcData.roll = 0;
+                        rcData.pitch = 0;
                         break;
                 }
             }
@@ -191,8 +200,15 @@ namespace AirSimUnity {
             var zoomValue = _playerInput.currentActionMap["Zoom"].ReadValue<float>();
             _liveViewCamera.fieldOfView = Mathf.Max(_minFoV, Mathf.Min(_maxFoV, _liveViewCamera.fieldOfView + (-zoomValue * _zoomSpeed)));
 
-            var targetThrottleVelocity = ((leftStick.y > 0) ? _throttleUpVelocity : _throttleDownpVelocity) * leftStick.y;
+            var throttleInput = leftStick.y;
+            if (_firstThrottleSeconds > 0)
+            {
+                _firstThrottleSeconds -= Time.deltaTime;
+                throttleInput = 0.5f;
+            }
 
+            var targetThrottleVelocity = ((throttleInput > 0) ? _throttleUpVelocity : _throttleDownpVelocity) * throttleInput;
+            
             rcData.throttle = _throttleControl.Calculate(targetThrottleVelocity, velocity.y);
             rcData.yaw = _yawControl.Calculate(_rotateSpeedRatio * leftStick.x, rotateDegrees.y);
 
@@ -201,9 +217,19 @@ namespace AirSimUnity {
             rcData.roll = _rollControl.Calculate(targetRollVelocity, localVelocity.x);
             rcData.pitch = _pitchControl.Calculate(targetPitchVelocity, localVelocity.z);
         }
-        private void Landing()
+
+        private void ControlLanding(Vector3 velocity)
         {
-            // !!!
+            var toGround = -_bottom.transform.up;
+            if (Physics.Raycast(_bottom.transform.position, toGround, 0.15f))
+            {
+                PowerState = PowerStates.Off;
+            }
+            
+            rcData.throttle = _throttleControl.Calculate(-0.5f, velocity.y);
+            rcData.yaw = 0;
+            rcData.roll = 0;
+            rcData.pitch = 0;
         }
 
         private Vector2 IgnoreTinyValue(Vector2 value)
@@ -247,10 +273,14 @@ namespace AirSimUnity {
         public void OnButtonPressed()
         {
             PowerState = PowerStates.On;
+            if (_firstThrottleSeconds <= 0)
+            {
+                _firstThrottleSeconds = 1.0f;
+            }
         }
         public void OffButtonPressed()
         {
-            PowerState = PowerStates.Off;
+            PowerState = PowerStates.Landing;
         }
     }
 }
